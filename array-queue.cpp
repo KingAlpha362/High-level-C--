@@ -6,81 +6,77 @@ const int MAX_SIZE = 5;
 
 class IntQueue {
 private:
-    // 1. Count how many items are currently stored.
+    // Count the stored items and identify the next free index when there is room.
     int itemCount;
 
     // Store the integers in a fixed-size array.
     int items[MAX_SIZE];
 
 public:
-    // 1. Constructor: a new queue starts empty.
     IntQueue() {
+        // 1. Start with zero items in the queue.
         itemCount = 0;
     }
 
-    // 2. The queue is empty when its item count is zero.
     bool isEmpty() const {
+        // 1. Check whether the queue contains zero items.
         return itemCount == 0;
     }
 
-    // The queue is full when all five positions are used.
     bool isFull() const {
+        // 1. Check whether the count has reached the array capacity.
         return itemCount == MAX_SIZE;
     }
 
-    // 3. Add an item at the rear of the queue.
     void enqueue(int newItem) {
+        // 1. Print a message if there are no free slots.
         if (isFull()) {
             cout << "Queue is full" << endl;
         } else {
-            // itemCount identifies the next free array position.
+            // 2. Store the item after the current last item.
             items[itemCount] = newItem;
 
-            // Record that the queue contains one more item.
+            // 3. Count the added item and advance the next free index.
             itemCount++;
         }
     }
 
-    // 4. Remove the item at the front of the queue.
     void dequeue() {
+        // 1. Print a message if there is nothing to remove.
         if (isEmpty()) {
             cout << "Queue is empty" << endl;
         } else {
-            // Move each remaining item one position left.
-            // For example: 10, 20, 30 becomes 20, 30.
+            // 2. Shift any later items left to fill the old front slot.
             for (int index = 0; index < itemCount - 1; index++) {
-                items[index] = items[index + 1];
+                items[index] = items[index + 1]; // Copy the item from the next slot.
             }
 
-            // The queue now contains one fewer item.
+            // 3. Reduce the count so the old last slot is outside the queue.
             itemCount--;
         }
     }
 
-    // 5. Read the front item without removing it.
-    // Only call this function when the queue is not empty.
     int front() const {
+        // 1. Read the first slot. This requires at least one item in the queue.
         return items[0];
     }
 };
 
-// 6. Test the queue.
 int main() {
+    // 1. Enqueue 10, 20, and 30 and show that 10 is at the front.
     IntQueue numberQueue;
 
-    // Add three integers: front to rear is 10, 20, 30.
     numberQueue.enqueue(10);
     numberQueue.enqueue(20);
     numberQueue.enqueue(30);
 
-    // The first integer added is at the front.
     cout << "Front: " << numberQueue.front() << endl;
 
-    // Remove 10. The front is now 20.
+    // 2. Remove 10 and show that 20 is now at the front.
     numberQueue.dequeue();
     cout << "Front: " << numberQueue.front() << endl;
 
-    // Remove 20 and 30, then attempt removal from an empty queue.
+    // 3. Remove 20 and 30, then try a removal from the empty queue.
     numberQueue.dequeue();
     numberQueue.dequeue();
     numberQueue.dequeue();
@@ -88,11 +84,10 @@ int main() {
     if (numberQueue.isEmpty())
         cout << "Queue is now empty" << endl;
 
-    // Store 1 through 5. The attempt to add 6 fails.
+    // 4. Fill all five slots, try adding a sixth item, and read the front again.
     for (int number = 1; number <= 6; number++)
         numberQueue.enqueue(number);
 
-    // The first integer added, 1, is still at the front.
     cout << "Front: " << numberQueue.front() << endl;
 
     return 0;
